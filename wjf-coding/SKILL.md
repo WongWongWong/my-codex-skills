@@ -42,6 +42,31 @@ description: 在现有代码仓库中规划、实现或审查严格限定范围�
 - 注释只解释业务意图、非显而易见的约束或重要原因，不复述代码。
 - 不为理论完整性增加当前需求不需要的层次、扩展点或兼容分支。若项目尚未上线且用户明确不需要兼容，不添加存档迁移或旧结构支持。
 
+## Roblox 实例访问规范
+
+以下规则是本项目的强制代码风格，不得以“实例肯定存在”“已经 Clone”或“代码更短”为由绕过。
+
+- 按名称获取子实例时，必须使用明确的实例查找方法。
+- 必需的子实例使用 `WaitForChild("名称")`，客户端尤其应遵守。
+- 允许不存在的可选子实例使用 `FindFirstChild("名称")`，并明确处理不存在的情况。
+- 禁止使用 `instance.ChildName`、`instance["名称"]` 或 `instance[name]` 获取子实例；中文名称、动态名称、克隆后的实例同样适用。
+- 获取服务统一使用 `game:GetService("服务名")`。
+- 实例属性、事件信号和普通 Lua 表字段仍使用正常成员访问，不要机械替换为 `WaitForChild`。
+
+示例：
+
+- 正确：`rootPart:WaitForChild("连接")`、`rootPart:WaitForChild("GroundRing")`。
+- 可选子实例：`rootPart:FindFirstChild("OptionalEffect")`。
+- 错误：`rootPart["连接"]`、`rootPart.GroundRing`。
+- 属性访问正确：`rootPart.CFrame`、`script.Parent`。
+- 表字段访问正确：`GameEvents.Local`、`DataHelper.onTrainPowerChanged`。
+
+提交前检查：
+
+- 检查本次新增或修改的全部代码，逐一确认点号和方括号访问的对象类型。
+- 发现一处违规后，检查本次变更中的所有同类访问，不只修复被指出的一行。
+- 检查发现范围外的既有问题时，只报告，不擅自修改。
+
 ## 审查
 
 以已确认要求和仓库既有契约为基准，优先报告缺陷、回归、遗漏引用和范围漂移，并给出具体证据。不要把个人偏好或未确认建议当作缺陷；仅要求审查时不得修改代码。
