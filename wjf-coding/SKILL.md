@@ -72,11 +72,14 @@ description: 在现有代码仓库中规划、实现或审查严格限定范围�
 
 以下规则是本项目的强制代码风格，不得以“实例肯定存在”“已经 Clone”或“代码更短”为由绕过。
 
-- 按名称获取子实例时，必须使用明确的实例查找方法。
+- 按名称获取普通子实例时，必须使用明确的实例查找方法；服务获取按下述服务规则处理。
 - 必需的子实例使用 `WaitForChild("名称")`，客户端尤其应遵守。
 - 允许不存在的可选子实例使用 `FindFirstChild("名称")`，并明确处理不存在的情况。
-- 禁止使用 `instance.ChildName`、`instance["名称"]` 或 `instance[name]` 获取子实例；中文名称、动态名称、克隆后的实例同样适用。
-- 获取服务统一使用 `game:GetService("服务名")`。
+- 禁止使用 `instance.ChildName`、`instance["名称"]` 或 `instance[name]` 获取普通子实例；中文名称、动态名称、克隆后的实例同样适用。下述 `game.ServiceName` 服务访问是例外。
+- 支持通过 `game.ServiceName` 直接访问的服务，直接使用该方式，例如 `game.ReplicatedStorage`、`game.Players`，不调用 `game:GetService(...)`。
+- 需要通过 `GetService` 获取的服务，在脚本顶部统一声明并缓存：`local 服务名 = game:GetService("服务名")`。
+- 后续代码只使用缓存变量，禁止在业务代码中重复调用 `game:GetService(...)`，或通过 `game:GetService(...).成员`、`game:GetService(...):方法()` 直接链式访问。
+- 服务直接访问的例外仅适用于获取服务本身；服务下的普通子实例仍按必需或可选分别使用 `WaitForChild`、`FindFirstChild`。
 - 实例属性、事件信号和普通 Lua 表字段仍使用正常成员访问，不要机械替换为 `WaitForChild`。
 
 示例：
