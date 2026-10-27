@@ -117,6 +117,32 @@ description: 在现有代码仓库中规划、实现或审查严格限定范围�
 - 发现一处违规后，检查本次变更中的所有同类访问，不只修复被指出的一行。
 - 检查发现范围外的既有问题时，只报告，不擅自修改。
 
+## 模块引用与实例封装
+
+- 获取 ModuleScript 仅用于 `require` 时，直接写成一条语句，不为模块实例增加一次性中间变量。
+- 模块自身拥有、需要供外部使用的事件或子实例，由模块内部统一使用 `WaitForChild` 缓存并暴露。
+- 外部脚本通过模块导出的字段访问这些实例，不重复查找模块实例及其子节点。
+- 单纯转发模块已暴露的字段时，直接使用 `模块名.字段名`，不增加无实际用途的局部别名。
+- 延续同模块已有的字段命名和组织方式；模块导出表的字段访问使用正常点号语法。
+
+示例：
+
+```lua
+-- 调用方：直接 require
+local DataHelper = require(game.ReplicatedStorage:WaitForChild("Scripts"):WaitForChild("Helpers"):WaitForChild("DataHelper"))
+
+-- DataHelper 内部：缓存并暴露自己拥有的事件
+DataHelper.RequestPlayerVoC2S = script:WaitForChild("RequestPlayerVoC2S")
+
+-- 客户端
+DataHelper.RequestPlayerVoC2S:FireServer()
+
+-- 服务端
+DataHelper.RequestPlayerVoC2S.OnServerEvent:Connect(function(player:Player)
+	-- 处理请求
+end)
+```
+
 ## 审查
 
 以已确认要求和仓库既有契约为基准，优先报告缺陷、回归、遗漏引用和范围漂移，并给出具体证据。不要把个人偏好或未确认建议当作缺陷；仅要求审查时不得修改代码。
