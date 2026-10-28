@@ -1,0 +1,4 @@
+interface:
+  display_name: "roblox-plants"
+  short_description: "规范 Roblox 植物资产的制作、改造与验收，兼顾外观、动作和性能"
+  default_prompt: "使用 $roblox-plants，按当前任务范围制定或执行植物制作方案，并依据规范完成验收。"
