@@ -31,7 +31,7 @@
 
 ## 3. 根节点、骨架与连接
 
-- 根类型与层级遵循实际用途及项目契约。Tool 型项目区分外层 Tool、Handle 与内部可缩放 Model；PrimaryPart 和 ScaleTo 属于 Model，不能当作 Tool 成员使用。保留各自约定的引用和制作基准比例；纯场景植物不强制转换为 Tool。
+- 根类型与层级遵循实际用途及项目契约。Tool 通过 BackpackItem 继承 Model，因此具有 PrimaryPart、GetScale 和 ScaleTo。按实际调用方确认整体缩放作用于外层 Tool 还是内部 Model；不能仅因外层是 Tool 就迁移缩放目标，以免遗漏外层骨架、几何或特效。保留约定的 Handle、枢轴和制作基准比例；纯场景植物不强制转换为 Tool。
 - 每个关节有明确的独立运动、变形或层级传递用途。不可见 Carrier 可以用于枢轴与传递，不因不可见就视为冗余。
 - 同一对部件不建立重复刚性连接。检查失效端点、意外外部引用、多重约束和环路；有意的特殊约束结构应有明确用途。
 - 对需要整体移动、摆放或手持的资产，所有视觉件和特效承载件应有明确跟随关系。独立控制器驱动的效果可以单独存在，但不能将无控制、无连接的物理部件作为附属装饰交付。
@@ -72,7 +72,7 @@
 
 | 已发现的体系 | 条件性检查 |
 |---|---|
-| Tool 型农场/手持植物 | 外层 Tool 名称与 Handle、内部 Model 的 PrimaryPart 与基准比例、手持姿态保持契约 |
+| Tool 型农场/手持植物 | 外层 Tool 名称与 Handle、实际缩放根的 PrimaryPart 与基准比例、完整后代范围及手持姿态保持契约 |
 | VoxelAnimatedPlant / VoxelLavaBloom 程序动画 | 标签所在内部 Model、Root、RigJointCount、关节 SwayDegrees/SwayPhase 和 Idle 参数与驱动一致 |
 | HalloweenAnimatedPlant 程序动画 | 外层标签、主题/身份/参考比例、HalloweenRole、中性连接和变形归属与导演一致 |
 
@@ -83,6 +83,7 @@
 需要核对当前引擎行为时，优先查官方文档，不将本文建议当成引擎实现保证：
 
 - [Model 与 ScaleTo](https://create.roblox.com/docs/reference/engine/classes/Model)
+- [Tool 的继承关系](https://create.roblox.com/docs/reference/engine/classes/Tool)
 - [性能优化](https://create.roblox.com/docs/performance-optimization/improve)
 - [模型制作与导出规格](https://create.roblox.com/docs/art/modeling/specifications)
 
