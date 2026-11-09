@@ -1,0 +1,4 @@
+interface:
+  display_name: "roblox-combat-animation"
+  short_description: "将参考动作落实为可接入项目的连击、奥义、受击、特效与音效预览"
+  default_prompt: "使用 $roblox-combat-animation，结合现有项目制作或调整连击与奥义，完成对应动作、受击、特效、音效和预览验收。"
