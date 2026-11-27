@@ -95,6 +95,11 @@ description: 凡涉及代码的规划、实施或审查，都使用此 Skill。�
 - 只有结构确实需要根据运行时数据生成时，才动态搭建可视对象，并说明具体必要性；不得仅为脚本自包含或减少修改文件数而动态创建。少量非可视控制实例（如驱动 Tween 的 NumberValue）不受此限制。
 
 
+## Roblox 时间源选择
+
+- **游戏运行时间**。计算对局、阶段或冷却的已过时长时，只要 `workspace.DistributedGameTime` 能满足需求，就使用它，不使用 `os.clock()`。从特定事件开始计时时，在事件发生时记录起点，在同一端用当前值减去起点。
+- **服务器时间**。需要服务器当前时间戳，或需要多个客户端按同一个截止时刻计算剩余时间时，使用 `workspace:GetServerTimeNow()`。截止时间和当前时间使用同一时间源。
+
 ## Roblox Tween 使用
 
 - 常规属性动画优先使用 TweenService。位置、尺寸、缩放、旋转、透明度、颜色等有明确起止值的动画，能够用 Tween 实现时，不使用 `repeat`、`while`、`RenderStepped` 或 `Heartbeat` 逐帧插值。
